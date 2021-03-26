@@ -1,4 +1,6 @@
 const request = require('request')
+const config = require('./config.js');
+
 
 /**
  * Weather Challenge: Retrieve weather information given lat/long
@@ -6,7 +8,8 @@ const request = require('request')
  * User Enters lat + long: return weather information
  */
 
-const url = 'http://api.weatherstack.com/current?access_key=058d6f074fad58d126c6d9851fcb8d2e&query=37.8267,-122.4233&units=f'
+const weather_stack_tok = config.WEATHER_STACK_TOKEN
+const url = `http://api.weatherstack.com/current?access_key=${weather_stack_tok}&query=37.8267,-122.4233&units=f`
 
 // request({options object}, callback function(error, json_response))
 // we would like this request to parse this as json
@@ -28,8 +31,8 @@ request({ url: url, json: true }, (err, res) =>{
  * We will be using forward geocoding => address -> lat/long
  */ 
 
-
-const geo_url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/Fresno.json?access_token=pk.eyJ1IjoiaHVudGVybWFjaWFzIiwiYSI6ImNrbXEyN3IzazA5ZjUycm5uajQ5bWprMnUifQ.7we5XE2RKpd_aL4pyJp-SA&limit=1'
+const geocode_token = config.GEOCODE_TOKEN
+const geo_url = `https://api.mapbox.com/geocoding/v5/mapbox.places/Fresno.json?access_token=${geocode_token}&limit=1`
 request({url: geo_url, json: true}, (err, res) => {
 	try{
 		const long = res.body.features[0].center[0]
@@ -40,3 +43,4 @@ request({url: geo_url, json: true}, (err, res) => {
 		console.log("unable to make request to mapbox api")
 	}
 })
+
